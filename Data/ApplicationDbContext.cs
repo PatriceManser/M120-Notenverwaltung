@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Notenverwaltung.Models;
 
 namespace Notenverwaltung.Data
 {
@@ -12,5 +13,8 @@ namespace Notenverwaltung.Data
             : base(options)
         {
         }
+        public DbSet<Notenverwaltung.Models.Student> Student { get; set; }
+        public DbSet<Notenverwaltung.Models.Teacher> Teacher { get; set; }
+        public DbSet<Notenverwaltung.Models.Admin> Admin { get; set; }
     }
 }
