@@ -66,5 +66,50 @@ namespace Notenverwaltung
                 endpoints.MapRazorPages();
             });
         }
+
+        private void CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            Task<IdentityResult> roleResult;
+            foreach (var roleName in Enum.GetNames(typeof(Role)))
+            {
+                Task<bool> roleExist = roleManager.RoleExistsAsync(roleName);
+                roleExist.Wait();
+                if (!roleExist.Result)
+                {
+                    roleResult = roleManager.CreateAsync(new IdentityRole(roleName));
+                    roleResult.Wait();
+                }
+            }
+            CreateInitialAdminUser(userManager);
+        }
+        private void CreateInitialAdminUser(UserManager<IdentityUser> userManager)
+        {
+            Task<IdentityUser> existingUser = userManager.FindByEmailAsync(Configuration["AdminUserEmail"]);
+            existingUser.Wait();
+            if (existingUser.Result == null)
+            {
+                var initialAdminUser = new IdentityUser
+                {
+                    UserName = Configuration["AdminUserName"],
+                    Email = Configuration["AdminUserEmail"],
+                };
+                string initialAdminUserPassword = Configuration["AdminUserPassword"];
+                Task<IdentityResult> createPowerUser = userManager.CreateAsync(initialAdminUser, initialAdminUserPassword);
+                createPowerUser.Wait();
+                if (createPowerUser.Result.Succeeded)
+                {
+                    Task<IdentityResult> newUserRole = userManager.AddToRoleAsync(initialAdminUser, Role.Administrator.ToString());
+                    newUserRole.Wait();
+                }
+            }
+        }
+    }
+    public enum Role
+    {
+        Administrator,
+        Teacher,
+        Student
     }
 }

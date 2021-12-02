@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Notenverwaltung.Data;
 using Notenverwaltung.Models;
+using Notenverwaltung;
 
 namespace Notenverwaltung.Controllers
 {
+    [AuthorizeRoles(Role.Administrator)]
     public class TeachersController : Controller
     {
         private readonly ApplicationDbContext _context;
