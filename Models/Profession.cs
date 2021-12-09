@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Notenverwaltung.Models
 {
-    public class Student : User
+    public class Profession
     {
-        public String SchoolClass { get; set; }
+        public int ProfessionId { get; set; }
+        public List<Module> Modules { get; set; }
     }
 }

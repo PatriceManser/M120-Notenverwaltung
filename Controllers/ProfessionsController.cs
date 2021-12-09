@@ -7,27 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Notenverwaltung.Data;
 using Notenverwaltung.Models;
-using Notenverwaltung;
 
-namespace Notenverwaltung.Controllers
+namespace Notenverwaltung
 {
-    [AuthorizeRoles(Role.Administrator)]
-    public class TeachersController : Controller
+    public class ProfessionsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TeachersController(ApplicationDbContext context)
+        public ProfessionsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Teachers
+        // GET: Professions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Teacher.ToListAsync());
+            return View(await _context.Profession.ToListAsync());
         }
 
-        // GET: Teachers/Details/5
+        // GET: Professions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,39 +33,39 @@ namespace Notenverwaltung.Controllers
                 return NotFound();
             }
 
-            var teacher = await _context.Teacher
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (teacher == null)
+            var profession = await _context.Profession
+                .FirstOrDefaultAsync(m => m.ProfessionId == id);
+            if (profession == null)
             {
                 return NotFound();
             }
 
-            return View(teacher);
+            return View(profession);
         }
 
-        // GET: Teachers/Create
+        // GET: Professions/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Teachers/Create
+        // POST: Professions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchoolClass,Id,FirstName,LastName,EMail,Password")] Teacher teacher)
+        public async Task<IActionResult> Create([Bind("Id")] Profession profession)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(teacher);
+                _context.Add(profession);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(teacher);
+            return View(profession);
         }
 
-        // GET: Teachers/Edit/5
+        // GET: Professions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,22 +73,22 @@ namespace Notenverwaltung.Controllers
                 return NotFound();
             }
 
-            var teacher = await _context.Teacher.FindAsync(id);
-            if (teacher == null)
+            var profession = await _context.Profession.FindAsync(id);
+            if (profession == null)
             {
                 return NotFound();
             }
-            return View(teacher);
+            return View(profession);
         }
 
-        // POST: Teachers/Edit/5
+        // POST: Professions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SchoolClass,Id,FirstName,LastName,EMail,Password")] Teacher teacher)
+        public async Task<IActionResult> Edit(int id, [Bind("Id")] Profession profession)
         {
-            if (id != teacher.Id)
+            if (id != profession.ProfessionId)
             {
                 return NotFound();
             }
@@ -99,12 +97,12 @@ namespace Notenverwaltung.Controllers
             {
                 try
                 {
-                    _context.Update(teacher);
+                    _context.Update(profession);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TeacherExists(teacher.Id))
+                    if (!ProfessionExists(profession.ProfessionId))
                     {
                         return NotFound();
                     }
@@ -115,10 +113,10 @@ namespace Notenverwaltung.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(teacher);
+            return View(profession);
         }
 
-        // GET: Teachers/Delete/5
+        // GET: Professions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -126,30 +124,30 @@ namespace Notenverwaltung.Controllers
                 return NotFound();
             }
 
-            var teacher = await _context.Teacher
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (teacher == null)
+            var profession = await _context.Profession
+                .FirstOrDefaultAsync(m => m.ProfessionId == id);
+            if (profession == null)
             {
                 return NotFound();
             }
 
-            return View(teacher);
+            return View(profession);
         }
 
-        // POST: Teachers/Delete/5
+        // POST: Professions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var teacher = await _context.Teacher.FindAsync(id);
-            _context.Teacher.Remove(teacher);
+            var profession = await _context.Profession.FindAsync(id);
+            _context.Profession.Remove(profession);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TeacherExists(int id)
+        private bool ProfessionExists(int id)
         {
-            return _context.Teacher.Any(e => e.Id == id);
+            return _context.Profession.Any(e => e.ProfessionId == id);
         }
     }
 }

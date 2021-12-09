@@ -20,6 +20,22 @@ namespace Notenverwaltung.Controllers
 
         public IActionResult Index()
         {
+/*            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Administrator"))
+                {
+                    return RedirectToAction(nameof(UserController.index), "Users");
+                }
+                if (User.IsInRole("Student"))
+                {
+                    return RedirectToRoute("Grades/getStudent?" + User.Identity.Name);
+                }
+            }
+            else
+            {
+                return RedirectToRoute("Access/Login");
+            }*/
+
             return View();
         }
 

@@ -7,10 +7,16 @@ namespace Notenverwaltung.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public String EMail { get; set; }
         public String Password { get; set; }
+        public Role Role { get; set; }
+/*        public int ProfessionId { get; set; }
+        public Profession Profession { get; set; }*/
+        public int SchoolClassId { get; set; }
+        public SchoolClass SchoolClass { get; set; }
+
     }
 }

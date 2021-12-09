@@ -8,24 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using Notenverwaltung.Data;
 using Notenverwaltung.Models;
 
-namespace Notenverwaltung.Controllers
+namespace Notenverwaltung
 {
-    public class StudentsController : Controller
+    public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public StudentsController(ApplicationDbContext context)
+        public UsersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Students
+        // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Student.ToListAsync());
+            var applicationDbContext = _context.User.Include(u => u.SchoolClass);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Students/Details/5
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,43 @@ namespace Notenverwaltung.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (student == null)
+            var user = await _context.User
+                .Include(u => u.SchoolClass)
+                .FirstOrDefaultAsync(m => m.UserId == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(user);
         }
 
-        // GET: Students/Create
+        // GET: Users/Create
         public IActionResult Create()
         {
+            ViewData["ProfessionId"] = new SelectList(_context.Profession, "Id", "Id");
+            ViewData["SchoolClassId"] = new SelectList(_context.SchoolClass, "Id", "Id");
             return View();
         }
 
-        // POST: Students/Create
+        // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchoolClass,Id,FirstName,LastName,EMail,Password")] Student student)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,EMail,Password,Role,ProfessionId,SchoolClassId")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(student);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            ViewData["SchoolClassId"] = new SelectList(_context.SchoolClass, "Id", "Id", user.SchoolClassId);
+            return View(user);
         }
 
-        // GET: Students/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +78,23 @@ namespace Notenverwaltung.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student.FindAsync(id);
-            if (student == null)
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(student);
+            ViewData["SchoolClassId"] = new SelectList(_context.SchoolClass, "Id", "Id", user.SchoolClassId);
+            return View(user);
         }
 
-        // POST: Students/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SchoolClass,Id,FirstName,LastName,EMail,Password")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,EMail,Password,Role,ProfessionId,SchoolClassId")] User user)
         {
-            if (id != student.Id)
+            if (id != user.UserId)
             {
                 return NotFound();
             }
@@ -97,12 +103,12 @@ namespace Notenverwaltung.Controllers
             {
                 try
                 {
-                    _context.Update(student);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentExists(student.Id))
+                    if (!UserExists(user.UserId))
                     {
                         return NotFound();
                     }
@@ -113,10 +119,11 @@ namespace Notenverwaltung.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            ViewData["SchoolClassId"] = new SelectList(_context.SchoolClass, "Id", "Id", user.SchoolClassId);
+            return View(user);
         }
 
-        // GET: Students/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +131,31 @@ namespace Notenverwaltung.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (student == null)
+            var user = await _context.User
+                .Include(u => u.SchoolClass)
+                .FirstOrDefaultAsync(m => m.UserId == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(user);
         }
 
-        // POST: Students/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var student = await _context.Student.FindAsync(id);
-            _context.Student.Remove(student);
+            var user = await _context.User.FindAsync(id);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Student.Any(e => e.Id == id);
+            return _context.User.Any(e => e.UserId == id);
         }
     }
 }
