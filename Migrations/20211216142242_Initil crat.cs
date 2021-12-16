@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Notenverwaltung.Migrations
 {
-    public partial class DatabaseStructureacccordingtoClassdiagram : Migration
+    public partial class Initilcrat : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,31 +19,6 @@ namespace Notenverwaltung.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,6 +51,83 @@ namespace Notenverwaltung.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Module",
+                columns: table => new
+                {
+                    ModuleId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Grade = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Weight = table.Column<long>(nullable: false),
+                    ProfessionId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Module", x => x.ModuleId);
+                    table.ForeignKey(
+                        name: "FK_Module_Profession_ProfessionId",
+                        column: x => x.ProfessionId,
+                        principalTable: "Profession",
+                        principalColumn: "ProfessionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SchoolClass",
+                columns: table => new
+                {
+                    SchoolClassId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    ProfessionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SchoolClass", x => x.SchoolClassId);
+                    table.ForeignKey(
+                        name: "FK_SchoolClass_Profession_ProfessionId",
+                        column: x => x.ProfessionId,
+                        principalTable: "Profession",
+                        principalColumn: "ProfessionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    SchoolClassId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_SchoolClass_SchoolClassId",
+                        column: x => x.SchoolClassId,
+                        principalTable: "SchoolClass",
+                        principalColumn: "SchoolClassId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -164,72 +216,6 @@ namespace Notenverwaltung.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Module",
-                columns: table => new
-                {
-                    ModuleId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Grade = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Weight = table.Column<long>(nullable: false),
-                    ProfessionId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Module", x => x.ModuleId);
-                    table.ForeignKey(
-                        name: "FK_Module_Profession_ProfessionId",
-                        column: x => x.ProfessionId,
-                        principalTable: "Profession",
-                        principalColumn: "ProfessionId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SchoolClass",
-                columns: table => new
-                {
-                    SchoolClassId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    ProfessionId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SchoolClass", x => x.SchoolClassId);
-                    table.ForeignKey(
-                        name: "FK_SchoolClass_Profession_ProfessionId",
-                        column: x => x.ProfessionId,
-                        principalTable: "Profession",
-                        principalColumn: "ProfessionId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    EMail = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Role = table.Column<int>(nullable: false),
-                    SchoolClassId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_User_SchoolClass_SchoolClassId",
-                        column: x => x.SchoolClassId,
-                        principalTable: "SchoolClass",
-                        principalColumn: "SchoolClassId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -270,6 +256,11 @@ namespace Notenverwaltung.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_SchoolClassId",
+                table: "AspNetUsers",
+                column: "SchoolClassId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Module_ProfessionId",
                 table: "Module",
                 column: "ProfessionId");
@@ -278,11 +269,6 @@ namespace Notenverwaltung.Migrations
                 name: "IX_SchoolClass_ProfessionId",
                 table: "SchoolClass",
                 column: "ProfessionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_SchoolClassId",
-                table: "User",
-                column: "SchoolClassId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -304,9 +290,6 @@ namespace Notenverwaltung.Migrations
 
             migrationBuilder.DropTable(
                 name: "Module");
-
-            migrationBuilder.DropTable(
-                name: "User");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

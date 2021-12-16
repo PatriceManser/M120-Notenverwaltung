@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Notenverwaltung.Data;
+using Notenverwaltung.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,8 @@ namespace Notenverwaltung
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -70,7 +72,7 @@ namespace Notenverwaltung
         private void CreateRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             Task<IdentityResult> roleResult;
             foreach (var roleName in Enum.GetNames(typeof(Role)))
             {
@@ -84,13 +86,13 @@ namespace Notenverwaltung
             }
             CreateInitialAdminUser(userManager);
         }
-        private void CreateInitialAdminUser(UserManager<IdentityUser> userManager)
+        private void CreateInitialAdminUser(UserManager<ApplicationUser> userManager)
         {
-            Task<IdentityUser> existingUser = userManager.FindByEmailAsync(Configuration["AdminUserEmail"]);
+            Task<ApplicationUser> existingUser = userManager.FindByEmailAsync(Configuration["AdminUserEmail"]);
             existingUser.Wait();
             if (existingUser.Result == null)
             {
-                var initialAdminUser = new IdentityUser
+                var initialAdminUser = new ApplicationUser
                 {
                     UserName = Configuration["AdminUserName"],
                     Email = Configuration["AdminUserEmail"],

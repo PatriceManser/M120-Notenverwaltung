@@ -14,6 +14,8 @@
     <Compile Remove="Migrations\20211209151220_Database Structure acccording to Class-diagram.Designer.cs" />
     <Compile Remove="Migrations\20211209164034_Database Structure acccording to Class-diagram.cs" />
     <Compile Remove="Migrations\20211209164034_Database Structure acccording to Class-diagram.Designer.cs" />
+    <Compile Remove="Migrations\20211209165632_Database Structure acccording to Class-diagram.cs" />
+    <Compile Remove="Migrations\20211209165632_Database Structure acccording to Class-diagram.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
