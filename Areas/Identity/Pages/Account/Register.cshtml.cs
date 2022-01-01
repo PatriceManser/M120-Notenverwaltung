@@ -61,6 +61,21 @@ namespace Notenverwaltung.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "FirstName")]
+            public string FirstName{ get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "LastName")]
+            public string LastName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "SchoolClass")]
+            public string SchoolClass { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
