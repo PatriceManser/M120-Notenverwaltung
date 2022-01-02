@@ -51,22 +51,22 @@ namespace Notenverwaltung
         //    return View();
         //}
 
-        //// POST: SchoolClasses/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        //// more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("SchoolClassId,Name,ProfessionId")] SchoolClass schoolClass)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(schoolClass);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["ProfessionId"] = new SelectList(_context.Profession, "ProfessionId", "ProfessionId", schoolClass.ProfessionId);
-        //    return View(schoolClass);
-        //}
+        // POST: ApplicationUsers/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("UserId,FirstName,LastName")] ApplicationUser user
+            )
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
 
         //// GET: SchoolClasses/Edit/5
         //public async Task<IActionResult> Edit(int? id)

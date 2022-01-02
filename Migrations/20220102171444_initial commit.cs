@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Notenverwaltung.Migrations
 {
-    public partial class Initilcrat : Migration
+    public partial class initialcommit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -118,7 +118,7 @@ namespace Notenverwaltung.Migrations
                     UserId = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    SchoolClassId = table.Column<int>(nullable: false)
+                    SchoolClassId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -128,7 +128,7 @@ namespace Notenverwaltung.Migrations
                         column: x => x.SchoolClassId,
                         principalTable: "SchoolClass",
                         principalColumn: "SchoolClassId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

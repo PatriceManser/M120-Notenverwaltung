@@ -202,7 +202,7 @@ namespace Notenverwaltung.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SchoolClassId")
+                    b.Property<int?>("SchoolClassId")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
@@ -346,9 +346,7 @@ namespace Notenverwaltung.Migrations
                 {
                     b.HasOne("Notenverwaltung.Models.SchoolClass", "SchoolClass")
                         .WithMany()
-                        .HasForeignKey("SchoolClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SchoolClassId");
                 });
 
             modelBuilder.Entity("Notenverwaltung.Models.Module", b =>

@@ -11,8 +11,8 @@ namespace Notenverwaltung.Models
         public int UserId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
-        public int SchoolClassId { get; set; }
-        public SchoolClass SchoolClass { get; set; }
+        public int? SchoolClassId { get; set; }
+        public SchoolClass? SchoolClass { get; set; }
 
     }
 }

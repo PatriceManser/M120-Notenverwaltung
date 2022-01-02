@@ -54,7 +54,7 @@ namespace Notenverwaltung
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,grade,name,weight")] Module @module)
+        public async Task<IActionResult> Create([Bind("Id,Grade,Name,Weight")] Module @module)
         {
             if (ModelState.IsValid)
             {
